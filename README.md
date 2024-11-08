@@ -1,6 +1,64 @@
-Aquí tienes el README completo que puedes copiar y pegar directamente en GitHub:
+Este repositorio contiene tres programas en C: `matmul.c`, `sobel.c` y `sobelMPI.c`, los cuales utilizan procesamiento paralelo con MPI (Message Passing Interface) y procesamiento de imágenes. A continuación se describen las instrucciones para compilar y ejecutar cada uno de estos programas.
 
-```markdown
+## Requisitos
+
+1. **MPI**: Asegúrate de tener instalada una implementación de MPI como OpenMPI o MPICH.
+2. **libjpeg**: Es necesario tener la librería `libjpeg` instalada para leer y escribir archivos JPEG. En sistemas basados en Debian/Ubuntu, puedes instalarla con:
+   ```bash
+   sudo apt-get install libjpeg-dev
+   ```
+
+## Archivos
+
+### 1. `matmul.c` - Multiplicación de matrices con MPI
+
+Este programa realiza la multiplicación de dos matrices de tamaño 4x4 usando procesamiento paralelo con MPI.
+
+#### Compilación
+Para compilar el archivo `matmul.c` con MPI, utiliza el siguiente comando:
+```bash
+mpicc -o matmul matmul.c
+```
+
+#### Ejecución
+Para ejecutar el programa con 4 procesos (ajusta el número de procesos según tu sistema):
+```bash
+mpirun -np 4 --hostfile hosts ./matmul
+```
+
+### 2. `sobel.c` - Filtro Sobel en una imagen JPEG
+
+Este programa aplica un filtro Sobel para detección de bordes en una imagen JPEG. Convierte la imagen a escala de grises antes de aplicar el filtro.
+
+#### Compilación
+Para compilar el archivo `sobel.c`:
+```bash
+gcc -o sobel sobel.c -ljpeg -lm
+```
+
+#### Ejecución
+Para ejecutar el programa, pasa como parámetros el archivo de entrada (imagen JPEG) y el archivo de salida:
+```bash
+./sobel imagen_entrada.jpg imagen_salida.jpg
+```
+
+### 3. `sobelMPI.c` - Filtro Sobel en una imagen JPEG utilizando MPI
+
+Este programa aplica el filtro Sobel de manera distribuida sobre una imagen JPEG utilizando MPI. Divide el trabajo de procesamiento de la imagen entre los procesos disponibles.
+
+#### Compilación
+Para compilar el archivo `sobelMPI.c`:
+```bash
+mpicc -o sobelMPI sobelMPI.c -ljpeg -lm
+```
+
+#### Ejecución
+Para ejecutar el programa, usa el siguiente comando con el número de procesos adecuado:
+```bash
+mpirun -np 4 --hostfile hosts ./sobelMPI
+```
+Este comando asume que la imagen JPEG llamada `cat.jpeg` está disponible en el directorio actual. El resultado se guarda en un archivo de salida en formato RAW.
+
 # Filtro Sobel con OpenMP
 
 Este proyecto aplica el filtro Sobel a una imagen en formato JPEG utilizando OpenMP para la paralelización del procesamiento. El filtro Sobel es utilizado comúnmente en la detección de bordes en imágenes, y este código está optimizado para ser ejecutado en sistemas con soporte para paralelización mediante múltiples hilos.
@@ -62,10 +120,3 @@ Para aplicar el filtro Sobel a una imagen llamada `input.jpg` y guardar el resul
 ./sobelOpenMp input.jpg output.jpg
 ```
 
-## Licencia
-
-Este proyecto está bajo la Licencia MIT. Ver el archivo LICENSE para más detalles.
-
-```
-
-Este README cubre todos los aspectos importantes del proyecto, incluyendo instrucciones de compilación y ejecución, así como una explicación detallada del código. Simplemente cópialo y pégalo en tu repositorio de GitHub.
